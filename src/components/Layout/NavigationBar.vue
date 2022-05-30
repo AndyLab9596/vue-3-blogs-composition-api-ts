@@ -1,13 +1,13 @@
 <template>
     <header>
-        <nav class="header">
+        <nav class="container">
             <div class="branding">
                 <RouterLink class="header" :to="{ name: 'Home' }">
                     Fireblogs
                 </RouterLink>
             </div>
             <div class="nav-links">
-                <ul>
+                <ul class="" v-show="!mobile">
                     <RouterLink class="link" :to="{ name: 'Home' }">
                         Home
                     </RouterLink>
@@ -23,7 +23,7 @@
                 </ul>
             </div>
         </nav>
-        <menuIcon class="menu-icon" @click="toggleMobileNav" />
+        <menuIcon class="menu-icon" @click="toggleMobileNav" v-show="mobile" />
         <transition name="mobile-nav" mode="out-in">
             <ul class="mobile-nav" v-show="mobileNav">
                 <RouterLink class="link" :to="{ name: 'Home' }">
@@ -44,15 +44,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import menuIcon from '@/assets/Icons/bars-regular.svg';
+import { onMounted, ref } from 'vue';
 
 const mobile = ref<boolean>(false);
 const mobileNav = ref<boolean>(false);
+const windowWidth = ref<number>(window.innerWidth);
 
 const toggleMobileNav = () => {
     mobileNav.value = !mobileNav.value
-}
+};
+
+const checkScreen = () => {
+    windowWidth.value = window.innerWidth
+    if (windowWidth.value < 750) {
+        mobile.value = true;
+        return
+    }
+    mobile.value = false;
+    mobileNav.value = false;
+};
+
+onMounted(() => {
+    window.addEventListener('resize', checkScreen);
+    checkScreen();
+})
 
 
 
@@ -85,7 +101,7 @@ header {
             display: flex;
             align-items: center;
 
-            header {
+            .header {
                 font-size: 24px;
                 color: #000;
                 text-decoration: none;

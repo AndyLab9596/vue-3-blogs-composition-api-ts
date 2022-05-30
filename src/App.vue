@@ -3,13 +3,41 @@
     <div class="app">
       <NavigationBar />
       <router-view />
+      <FooterSection />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import NavigationBar from './components/UI/NavigationBar.vue';
+import { reactive, ref } from 'vue';
+import NavigationBar from './components/Layout/NavigationBar.vue';
+import FooterSection from './components/Layout/FooterSection.vue';
 
+interface ISamplePost {
+  title: string;
+  blogHTML: string;
+  blogCoverPhoto: string;
+}
+
+const welcomeScreen = reactive({
+  title: 'Welcome',
+  blogPost: 'Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!',
+  welcomeScreen: true,
+  photo: 'coding'
+})
+
+const sampleBlogPost = ref<ISamplePost[]>([
+  {
+    title: 'This is a Filter Title',
+    blogHTML: 'This is a filter blog post title',
+    blogCoverPhoto: 'beautiful-stories'
+  },
+  {
+    title: 'This is a Filter Title',
+    blogHTML: 'This is a filter blog post title',
+    blogCoverPhoto: 'designed-for-everyone'
+  }
+])
 
 </script>
 
