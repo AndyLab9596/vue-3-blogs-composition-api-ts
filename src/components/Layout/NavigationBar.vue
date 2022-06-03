@@ -17,7 +17,7 @@
                     <RouterLink class="link" :to="{ name: 'Home' }">
                         Create Post
                     </RouterLink>
-                    <RouterLink class="link" :to="{ name: 'Home' }">
+                    <RouterLink class="link" :to="{ name: 'Login' }">
                         Login/Register
                     </RouterLink>
                 </ul>
@@ -35,7 +35,7 @@
                 <RouterLink class="link" :to="{ name: 'Home' }">
                     Create Post
                 </RouterLink>
-                <RouterLink class="link" :to="{ name: 'Home' }">
+                <RouterLink class="link" :to="{ name: 'Login' }">
                     Login/Register
                 </RouterLink>
             </ul>

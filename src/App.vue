@@ -1,9 +1,9 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
-      <NavigationBar />
+      <NavigationBar v-if="isShowNavBarFooter" />
       <router-view />
-      <FooterSection />
+      <FooterSection v-if="isShowNavBarFooter" />
     </div>
   </div>
 </template>
@@ -11,6 +11,32 @@
 <script setup lang="ts">
 import NavigationBar from "./components/Layout/NavigationBar.vue";
 import FooterSection from "./components/Layout/FooterSection.vue";
+import { onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const isShowNavBarFooter = ref<boolean>(true);
+
+const checkRouteForShowNavBar = () => {
+  if (
+    route.name === "Login" ||
+    route.name === "Register" ||
+    route.name === "ForgotPassword"
+  ) {
+    isShowNavBarFooter.value = false;
+  } else {
+    isShowNavBarFooter.value = true;
+  }
+};
+
+watch(route, () => {
+  checkRouteForShowNavBar();
+});
+
+onMounted(() => {
+  checkRouteForShowNavBar();
+});
 </script>
 
 <style lang="scss">
