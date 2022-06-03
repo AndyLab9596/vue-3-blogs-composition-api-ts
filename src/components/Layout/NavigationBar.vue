@@ -3,7 +3,7 @@
         <nav class="container">
             <div class="branding">
                 <RouterLink class="header" :to="{ name: 'Home' }">
-                    Fireblogs
+                    FireBlogs
                 </RouterLink>
             </div>
             <div class="nav-links">
