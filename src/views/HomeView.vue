@@ -22,10 +22,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import BlogPost from "@/components/UI/BlogPost.vue";
 import BlogCard from "@/components/UI/BlogCard.vue";
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
+import { useStorePosts } from "@/stores/storePosts";
 
 export interface ISamplePost {
   title: string;
@@ -62,12 +63,18 @@ const sampleBlogPost = ref<ISamplePost[]>([
   },
 ]);
 
-const sampleBlogCards: IBlogCard[] = [
-  { blogTitle: "Blog Card #1", blogCoverPhoto: "stock-1", blogDate: "May 1, 2021" },
-  { blogTitle: "Blog Card #2", blogCoverPhoto: "stock-2", blogDate: "May 1, 2021" },
-  { blogTitle: "Blog Card #3", blogCoverPhoto: "stock-3", blogDate: "May 1, 2021" },
-  { blogTitle: "Blog Card #4", blogCoverPhoto: "stock-4", blogDate: "May 1, 2021" },
-];
+// const sampleBlogCards: IBlogCard[] = [
+//   { blogTitle: "Blog Card #1", blogCoverPhoto: "stock-1", blogDate: "May 1, 2021" },
+//   { blogTitle: "Blog Card #2", blogCoverPhoto: "stock-2", blogDate: "May 1, 2021" },
+//   { blogTitle: "Blog Card #3", blogCoverPhoto: "stock-3", blogDate: "May 1, 2021" },
+//   { blogTitle: "Blog Card #4", blogCoverPhoto: "stock-4", blogDate: "May 1, 2021" },
+// ];
+  const storePosts = useStorePosts();
+
+  const sampleBlogCards = computed(() => {
+    return storePosts.sampleBlogCards;
+  })
+
 </script>
 
 <style scoped lang="scss">

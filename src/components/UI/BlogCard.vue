@@ -1,6 +1,6 @@
 <template>
   <div class="blog-card">
-    <div class="icons">
+    <div class="icons" v-show="editPost">
       <div class="icon">
         <Edit class="edit" />
       </div>
@@ -20,17 +20,30 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { computed, defineProps, onBeforeUnmount } from "vue";
 import { IBlogCard } from "@/views/HomeView.vue";
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
 import Edit from "@/assets/Icons/edit-regular.svg";
 import Delete from "@/assets/Icons/trash-regular.svg";
+import { useStorePosts } from "@/stores/storePosts";
 
 interface IBlogCardProps {
   post: IBlogCard;
 }
 
 const props = defineProps<IBlogCardProps>();
+
+const storePosts = useStorePosts();
+const editPost = computed(() => {
+  return storePosts.editPost;
+});
+
+onBeforeUnmount(() => {
+  storePosts.toggleEditPost(false);
+});
+
+
+
 </script>
 
 <style scoped lang="scss">
