@@ -1,5 +1,5 @@
 <template>
-  <div class="blog-wrapper no-user">
+  <div class="blog-wrapper" :class="{ 'no-user': !user }">
     <div class="blog-content">
       <div>
         <h2 v-if="post.welcomeScreen">
@@ -15,38 +15,37 @@
           {{ post.blogPost }}
         </p>
         <router-link v-if="post.welcomeScreen" class="link link-light" to="#">
-          Login/Register <Arrow class="arrow arrow-light" />
+          Login/Register
+          <Arrow class="arrow arrow-light" />
         </router-link>
         <router-link v-else to="#" class="link">
-          View The Post <Arrow class="arrow" />
+          View The Post
+          <Arrow class="arrow" />
         </router-link>
       </div>
     </div>
     <div class="blog-photo">
-      <img
-        v-if="post.welcomeScreen"
-        :src="require(`../../assets/blogPhotos/${post.photo}.jpg`)"
-        alt="photo"
-      />
-      <img
-        v-else
-        :src="require(`../../assets/blogPhotos/${post.blogCoverPhoto}.jpg`)"
-        alt="photo"
-      />
+      <img v-if="post.welcomeScreen" :src="require(`../../assets/blogPhotos/${post.photo}.jpg`)" alt="photo" />
+      <img v-else :src="require(`../../assets/blogPhotos/${post.blogCoverPhoto}.jpg`)" alt="photo" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { computed, defineProps } from "vue";
 import { ISamplePost } from "../../views/HomeView.vue";
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
+import { useStoreProfile } from "@/stores/storeProfile";
 
 interface IBlogPostProps {
   post: ISamplePost;
 }
 
 const props = defineProps<IBlogPostProps>();
+const storeProfile = useStoreProfile();
+const user = computed(() => storeProfile.user);
+console.log(user)
+
 </script>
 <style scoped lang="scss">
 .blog-wrapper {
@@ -67,15 +66,19 @@ const props = defineProps<IBlogPostProps>();
     align-items: center;
     flex: 4;
     order: 2;
+
     @media (min-width: 700px) {
       order: 1;
     }
+
     @media (min-width: 800px) {
       flex: 3;
     }
+
     div {
       max-width: 375px;
       padding: 72px 24px;
+
       @media (min-width: 700px) {
         padding: 0 24px;
       }
@@ -85,6 +88,7 @@ const props = defineProps<IBlogPostProps>();
         font-weight: 300;
         text-transform: uppercase;
         margin-bottom: 24px;
+
         @media (min-width: 700px) {
           font-size: 40px;
         }

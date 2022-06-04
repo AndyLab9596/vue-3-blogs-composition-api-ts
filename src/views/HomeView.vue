@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <BlogPost :post="welcomeScreen" />
+    <BlogPost :post="welcomeScreen" v-if="!user" />
     <BlogPost v-for="(post, index) in sampleBlogPost" :key="index" :post="post" />
   </div>
   <div class="blog-card-wrap">
@@ -11,11 +11,12 @@
       </div>
     </div>
   </div>
-  <div class="updates">
+  <div class="updates" v-if="!user">
     <div class="container">
       <h2>never miss a post, Register for your free account today!</h2>
       <RouterLink class="router-button" to="#">
-        Register for FireBlogs <Arrow class="arrow arrow-light" />
+        Register for FireBlogs
+        <Arrow class="arrow arrow-light" />
       </RouterLink>
     </div>
   </div>
@@ -27,6 +28,7 @@ import BlogPost from "@/components/UI/BlogPost.vue";
 import BlogCard from "@/components/UI/BlogCard.vue";
 import Arrow from "@/assets/Icons/arrow-right-light.svg";
 import { useStorePosts } from "@/stores/storePosts";
+import { useStoreProfile } from "@/stores/storeProfile";
 
 export interface ISamplePost {
   title: string;
@@ -41,6 +43,9 @@ export interface IBlogCard {
   blogCoverPhoto: string;
   blogDate: string;
 }
+
+const storeProfile = useStoreProfile();
+const user = computed(() => storeProfile.user);
 
 const welcomeScreen = reactive({
   title: "Welcome",
@@ -63,17 +68,11 @@ const sampleBlogPost = ref<ISamplePost[]>([
   },
 ]);
 
-// const sampleBlogCards: IBlogCard[] = [
-//   { blogTitle: "Blog Card #1", blogCoverPhoto: "stock-1", blogDate: "May 1, 2021" },
-//   { blogTitle: "Blog Card #2", blogCoverPhoto: "stock-2", blogDate: "May 1, 2021" },
-//   { blogTitle: "Blog Card #3", blogCoverPhoto: "stock-3", blogDate: "May 1, 2021" },
-//   { blogTitle: "Blog Card #4", blogCoverPhoto: "stock-4", blogDate: "May 1, 2021" },
-// ];
-  const storePosts = useStorePosts();
+const storePosts = useStorePosts();
 
-  const sampleBlogCards = computed(() => {
-    return storePosts.sampleBlogCards;
-  })
+const sampleBlogCards = computed(() => {
+  return storePosts.sampleBlogCards;
+})
 
 </script>
 
@@ -92,6 +91,7 @@ const sampleBlogPost = ref<ISamplePost[]>([
     display: flex;
     flex-direction: column;
     align-items: center;
+
     @media (min-width: 800px) {
       padding: 125px 25px;
       flex-direction: row;
@@ -114,6 +114,7 @@ const sampleBlogPost = ref<ISamplePost[]>([
       width: 100%;
       text-align: center;
       text-transform: uppercase;
+
       @media (min-width: 800px) {
         text-align: initial;
         font-size: 40px;

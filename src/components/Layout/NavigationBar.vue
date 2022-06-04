@@ -17,10 +17,47 @@
                     <RouterLink class="link" :to="{ name: 'Home' }">
                         Create Post
                     </RouterLink>
-                    <RouterLink class="link" :to="{ name: 'Login' }">
+                    <RouterLink class="link" :to="{ name: 'Login' }" v-if="!user">
                         Login/Register
                     </RouterLink>
                 </ul>
+                <div @click="toggleIsDropdownProfile" class="profile" ref="profile" v-if="user">
+                    <span>{{ storeProfile.profileInitials }}</span>
+                    <div v-show="isShowDropdownProfile" class="profile-menu">
+                        <div class="info">
+                            <p class="initials">
+                                {{ storeProfile.profileInitials }}
+                            </p>
+                            <div class="right">
+                                <p>{{ storeProfile.profileFirstName }} {{ storeProfile.profileLastName }}</p>
+                                <p>
+                                    {{ storeProfile.profileUsername }}
+                                </p>
+                                <p>
+                                    {{ storeProfile.profileEmail }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="options">
+                            <div class="option">
+                                <RouterLink to="#" class="option">
+                                    <UserIcon class="icon" />
+                                    <p>Profile</p>
+                                </RouterLink>
+                            </div>
+                            <div class="option">
+                                <RouterLink to="#" class="option">
+                                    <AdminIcon class="icon" />
+                                    <p>Admin</p>
+                                </RouterLink>
+                            </div>
+                            <div class="option" @click="signOut">
+                                <SignOutIcon class="icon" />
+                                <p>Sign Out</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
         <menuIcon class="menu-icon" @click="toggleMobileNav" v-show="mobile" />
@@ -35,7 +72,7 @@
                 <RouterLink class="link" :to="{ name: 'Home' }">
                     Create Post
                 </RouterLink>
-                <RouterLink class="link" :to="{ name: 'Login' }">
+                <RouterLink class="link" :to="{ name: 'Login' }" v-if="!user">
                     Login/Register
                 </RouterLink>
             </ul>
@@ -45,11 +82,29 @@
 
 <script setup lang="ts">
 import menuIcon from '@/assets/Icons/bars-regular.svg';
-import { onMounted, ref } from 'vue';
+import UserIcon from "@/assets/Icons/user-alt-light.svg";
+import AdminIcon from '@/assets/Icons/user-alt-light.svg';
+import SignOutIcon from '@/assets/Icons/sign-out-alt-regular.svg';
+
+import { useStoreProfile } from '@/stores/storeProfile';
+import { computed, onMounted, ref } from 'vue';
+
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
+const storeProfile = useStoreProfile();
 
 const mobile = ref<boolean>(false);
 const mobileNav = ref<boolean>(false);
 const windowWidth = ref<number>(window.innerWidth);
+const isShowDropdownProfile = ref<boolean>(false);
+const profile = ref(null);
+
+const toggleIsDropdownProfile = (e: Event) => {
+    if (e.target === profile.value) {
+        isShowDropdownProfile.value = !isShowDropdownProfile.value;
+    }
+}
 
 const toggleMobileNav = () => {
     mobileNav.value = !mobileNav.value
@@ -64,6 +119,13 @@ const checkScreen = () => {
     mobile.value = false;
     mobileNav.value = false;
 };
+
+const signOut = () => {
+    firebase.auth().signOut();
+    window.location.reload();
+}
+
+const user = computed(() => storeProfile.user);
 
 onMounted(() => {
     window.addEventListener('resize', checkScreen);
@@ -127,6 +189,92 @@ header {
                     margin-right: 0;
                 }
             }
+
+            .profile {
+                position: relative;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                color: #fff;
+                background-color: #303030;
+
+                span {
+                    pointer-events: none;
+                }
+
+                .profile-menu {
+                    position: absolute;
+                    top: 60px;
+                    right: 0;
+                    width: 250px;
+                    background-color: #303030;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+                    .info {
+                        display: flex;
+                        align-items: center;
+                        padding: 15px;
+                        border-bottom: 1px solid #fff;
+
+                        .initials {
+                            position: initial;
+                            width: 40px;
+                            height: 40px;
+                            background-color: #fff;
+                            color: #303030;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 50%;
+                        }
+
+                        .right {
+                            flex: 1;
+                            margin-left: 24px;
+
+                            p:nth-child(1) {
+                                font-size: 14px;
+                            }
+
+                            p:nth-child(2),
+                            p:nth-child(3) {
+                                font-size: 12px;
+                            }
+                        }
+                    }
+
+                    .options {
+                        padding: 15px;
+
+                        .option {
+                            text-decoration: none;
+                            color: #fff;
+                            display: flex;
+                            align-items: center;
+                            margin-bottom: 12px;
+
+                            .icon {
+                                width: 18px;
+                                height: auto;
+                            }
+
+                            p {
+                                font-size: 14px;
+                                margin-left: 12px;
+                            }
+
+                            &:last-child {
+                                margin-bottom: 0px;
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     }
 

@@ -45,7 +45,7 @@ import UserIcon from "@/assets/Icons/user-alt-light.svg";
 
 import firebase from "firebase/app";
 import "firebase/auth";
-import db from "../../firebase/firebaseinit.ts";
+import db from "../../firebase/firebaseinit";
 
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -80,7 +80,7 @@ const register = async () => {
       password.value
     );
     const result = await createUser;
-    const dataBase = db.collection("users").doc(result.user.uid);
+    const dataBase = db.collection("users").doc(result?.user?.uid);
     await dataBase.set({
       firstName: firstName.value,
       lastName: lastName.value,
@@ -90,8 +90,10 @@ const register = async () => {
 
     router.push({ name: "Home" });
   } catch (error) {
-    isError.value = true;
-    errorMsg.value = error.message;
+    if (error instanceof Error) {
+      isError.value = true;
+      errorMsg.value = error.message;
+    }
   }
 };
 </script>

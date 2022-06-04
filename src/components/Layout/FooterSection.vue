@@ -34,7 +34,7 @@
             <RouterLink class="link" :to="{ name: 'Home' }"
               >Create Post</RouterLink
             >
-            <RouterLink class="link" :to="{ name: 'Login' }"
+            <RouterLink class="link" :to="{ name: 'Login' }" v-if="!user"
               >Login In / Register</RouterLink
             >
           </ul>
@@ -52,6 +52,13 @@ import youTube from "@/assets/Icons/youtube-brands.svg";
 import twitter from "@/assets/Icons/twitter-brands.svg";
 import instagram from "@/assets/Icons/instagram-brands.svg";
 import linkedin from "@/assets/Icons/linkedin-brands.svg";
+import { useStoreProfile } from "@/stores/storeProfile";
+import { computed } from "vue";
+
+
+const storeProfile = useStoreProfile();
+const user = computed(() => storeProfile.user);
+
 </script>
 
 <style lang="scss" scoped>
