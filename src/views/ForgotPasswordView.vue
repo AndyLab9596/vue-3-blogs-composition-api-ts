@@ -7,7 +7,7 @@
     />
     <LoadingVue v-if="isLoading" />
     <div class="form-wrap">
-      <form class="reset">
+      <form class="reset" @submit.prevent="resetPassword">
         <p class="login-register">
           Back to
           <RouterLink class="router-link" :to="{ name: 'Login' }">Login</RouterLink>
@@ -35,6 +35,9 @@ import { ref } from "vue";
 import ModalVue from "@/components/UI/ModalVue.vue";
 import LoadingVue from "@/components/UI/LoadingVue.vue";
 
+import firebase from "firebase/app";
+import "firebase/auth";
+
 const email = ref<string>("");
 const isModalActive = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
@@ -42,6 +45,20 @@ const modalMessage = ref<string>("");
 
 const closeModal = () => {
   isModalActive.value = false;
+};
+
+const resetPassword = async () => {
+  isLoading.value = true;
+  try {
+    await firebase.auth().sendPasswordResetEmail(email.value);
+    modalMessage.value = "If your account exist, you will receive a email";
+    isLoading.value = false;
+    isModalActive.value = true;
+  } catch (error) {
+    modalMessage.value = error.message;
+    isLoading.value = false;
+    isModalActive.value = true;
+  }
 };
 </script>
 

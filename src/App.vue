@@ -13,9 +13,15 @@ import NavigationBar from "./components/Layout/NavigationBar.vue";
 import FooterSection from "./components/Layout/FooterSection.vue";
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import firebase from "firebase/app";
+import "firebase/auth";
+import { firebaseApp } from "../firebase/firebaseinit";
+import { useStoreProfile } from "./stores/storeProfile";
 
+const db = firebase.firestore(firebaseApp);
 
 const route = useRoute();
+const storeProfile = useStoreProfile();
 
 const isShowNavBarFooter = ref<boolean>(true);
 
@@ -36,6 +42,12 @@ watch(route, () => {
 });
 
 onMounted(() => {
+  firebase.auth().onAuthStateChanged((user) => {
+    storeProfile.updateUser(Boolean(user));
+    if (user) {
+      storeProfile.getCurrentUser();
+    }
+  });
   checkRouteForShowNavBar();
 });
 </script>
@@ -75,10 +87,12 @@ onMounted(() => {
 .arrow {
   margin-left: 8px;
   width: 12px;
+
   path {
     fill: #000;
   }
 }
+
 .arrow-light {
   path {
     fill: #fff;
@@ -114,6 +128,7 @@ button,
   font-size: 15px;
   font-weight: 500;
   background-color: transparent;
+
   @media (min-width: 700px) {
     margin-top: 0;
     margin-left: auto;
@@ -146,6 +161,7 @@ button,
   position: relative;
   padding: 80px 16px;
   background-color: #f1f1f1;
+
   @media (min-width: 500px) {
     padding: 100px 16px;
   }
@@ -158,9 +174,11 @@ button,
     @media (min-width: 500px) {
       grid-template-columns: repeat(2, 1fr);
     }
+
     @media (min-width: 900px) {
       grid-template-columns: repeat(3, 1fr);
     }
+
     @media (min-width: 1200px) {
       grid-template-columns: repeat(4, 1fr);
     }
