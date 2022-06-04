@@ -41,10 +41,9 @@ interface IBlogPostProps {
   post: ISamplePost;
 }
 
-const props = defineProps<IBlogPostProps>();
+defineProps<IBlogPostProps>();
 const storeProfile = useStoreProfile();
 const user = computed(() => storeProfile.user);
-console.log(user)
 
 </script>
 <style scoped lang="scss">

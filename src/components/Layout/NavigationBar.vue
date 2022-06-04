@@ -40,13 +40,13 @@
                         </div>
                         <div class="options">
                             <div class="option">
-                                <RouterLink to="#" class="option">
+                                <RouterLink :to="{ name: 'Profile' }" class="option">
                                     <UserIcon class="icon" />
                                     <p>Profile</p>
                                 </RouterLink>
                             </div>
                             <div class="option">
-                                <RouterLink to="#" class="option">
+                                <RouterLink :to="{ name: 'Admin' }" class="option">
                                     <AdminIcon class="icon" />
                                     <p>Admin</p>
                                 </RouterLink>
@@ -82,16 +82,18 @@
 
 <script setup lang="ts">
 import menuIcon from '@/assets/Icons/bars-regular.svg';
-import UserIcon from "@/assets/Icons/user-alt-light.svg";
-import AdminIcon from '@/assets/Icons/user-alt-light.svg';
 import SignOutIcon from '@/assets/Icons/sign-out-alt-regular.svg';
+import UserIcon from "@/assets/Icons/user-alt-light.svg";
+import AdminIcon from '@/assets/Icons/user-crown-light.svg';
 
 import { useStoreProfile } from '@/stores/storeProfile';
-import { computed, onMounted, ref } from 'vue';
-
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+
+const route = useRoute()
 const storeProfile = useStoreProfile();
 
 const mobile = ref<boolean>(false);
@@ -126,6 +128,10 @@ const signOut = () => {
 }
 
 const user = computed(() => storeProfile.user);
+
+watch(route, () => {
+    isShowDropdownProfile.value = false;
+})
 
 onMounted(() => {
     window.addEventListener('resize', checkScreen);

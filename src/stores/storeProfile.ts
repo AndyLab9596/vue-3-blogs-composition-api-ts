@@ -37,12 +37,40 @@ export const useStoreProfile = defineStore('storeProfile', {
             this.profileLastName = dbResults.data()?.lastName;
             this.profileUsername = dbResults.data()?.username;
             this.profileInitials = dbResults.data()?.firstName.match(/(\b\S)?/g).join("") + dbResults.data()?.lastName.match(/(\b\S)?/g).join("");
-
         },
 
-        async updateUser (payload: boolean) {
+        async updateUser(payload: boolean) {
             this.user = payload;
+        },
+
+        changeFirstName(payload: string) {
+            this.profileFirstName = payload;
+        },
+
+        changeLastName(payload: string) {
+            this.profileLastName = payload;
+        },
+
+        changeUsername(payload: string) {
+            this.profileUsername = payload;
+        },
+
+        changeEmail(payload: string) {
+            this.profileEmail = payload;
+        },
+
+        async updateUserSettings() {
+            const dataBase = await db.collection('users').doc(this.profileId as string);
+            await dataBase.update({
+                firstName: this.profileFirstName,
+                lastName: this.profileLastName,
+                username: this.profileUsername,
+            })
+            const dbResults = await dataBase.get();
+            this.profileInitials = dbResults.data()?.firstName.match(/(\b\S)?/g).join("") + dbResults.data()?.lastName.match(/(\b\S)?/g).join("");
+
         }
+
     },
 
     getters: {},

@@ -6,6 +6,8 @@ const BlogsView = () => import('@/views/BlogsView.vue')
 const LoginView = () => import('@/views/LoginView.vue')
 const RegisterView = () => import('@/views/RegisterView.vue')
 const ForgotPasswordView = () => import('@/views/ForgotPasswordView.vue')
+const ProfileView = () => import('@/views/ProfileView.vue');
+const AdminView = () => import('@/views/AdminView.vue');
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -46,6 +48,22 @@ const routes: Array<RouteRecordRaw> = [
     component: ForgotPasswordView,
     meta: {
       title: 'ForgotPassword'
+    }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfileView,
+    meta: {
+      title: 'Profile'
+    }
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: AdminView,
+    meta: {
+      title: 'Admin'
     }
   },
 
