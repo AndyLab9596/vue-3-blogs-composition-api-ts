@@ -63,11 +63,11 @@ const errorMsg = ref<string>("");
 const register = async () => {
   try {
     if (
-      (email.value === "") &&
-      (password.value === "") &&
-      (firstName.value === "") &&
-      (lastName.value === "") &&
-      (username.value === "")
+      email.value === "" &&
+      password.value === "" &&
+      firstName.value === "" &&
+      lastName.value === "" &&
+      username.value === ""
     ) {
       isError.value = true;
       errorMsg.value = "Please fill out all the fields";
@@ -90,6 +90,7 @@ const register = async () => {
 
     router.push({ name: "Home" });
   } catch (error) {
+    isError.value = true;
     errorMsg.value = error.message;
   }
 };

@@ -14,6 +14,7 @@ import FooterSection from "./components/Layout/FooterSection.vue";
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
+
 const route = useRoute();
 
 const isShowNavBarFooter = ref<boolean>(true);

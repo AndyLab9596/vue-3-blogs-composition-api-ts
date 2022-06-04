@@ -1,6 +1,6 @@
 <template>
   <div class="form-wrap">
-    <form class="login">
+    <form class="login" @submit.prevent="signIn">
       <p class="login-register">
         Don't have an account?
         <RouterLink class="router-link" :to="{ name: 'Register' }">Register</RouterLink>
@@ -15,11 +15,14 @@
           <input type="password" placeholder="Password" v-model="password" />
           <PasswordIcon class="icon" />
         </div>
+        <div v-show="isError" class="error">
+          {{ errorMsg }}
+        </div>
       </div>
       <RouterLink class="forgot-password" :to="{ name: 'ForgotPassword' }">
         Forgot password
       </RouterLink>
-      <button>Sign In</button>
+      <button type="submit">Sign In</button>
       <div class="angle"></div>
     </form>
     <div class="background"></div>
@@ -29,11 +32,35 @@
 <script setup lang="ts">
 import EmailIcon from "@/assets/Icons/envelope-regular.svg";
 import PasswordIcon from "@/assets/Icons/lock-alt-solid.svg";
-
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import firebase from "firebase/app";
+import "firebase/auth";
+const router = useRouter();
 
 const email = ref<string>("");
 const password = ref<string>("");
+const isError = ref<boolean>(false);
+const errorMsg = ref<string>("");
+
+const signIn = async () => {
+  try {
+    if (email.value === "" && password.value === "") {
+      isError.value = true;
+      errorMsg.value = "Please fill out all the fields";
+      return;
+    }
+    isError.value = false;
+
+    const firebaseAuth = await firebase.auth();
+    await firebaseAuth.signInWithEmailAndPassword(email.value, password.value);
+    // const currentUserId = await firebase.auth().currentUser.uid;
+    router.push({ name: "Home" });
+  } catch (error) {
+    isError.value = true;
+    errorMsg.value = error.message;
+  }
+};
 </script>
 
 <style lang="scss">
